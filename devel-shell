@@ -1,0 +1,4 @@
+# use devel image to open the /app folder, so we can install more modules
+#
+
+docker run --rm -it -v /home/mike/lite-app:/app -p 3001:3000 -w /app perl-devel /bin/bash

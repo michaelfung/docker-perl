@@ -1,0 +1,12 @@
+# /etc/dpkg/dpkg.cfg.d/01_nodoc
+
+# use this config file to slim down the docker image
+
+# Delete locales
+path-exclude=/usr/share/locale/*
+
+# Delete man pages
+path-exclude=/usr/share/man/*
+
+# Delete docs
+path-exclude=/usr/share/doc/*

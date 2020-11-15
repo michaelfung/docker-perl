@@ -1,0 +1,1 @@
+docker run --rm -it -v /home/mike/lite-app:/app -p 3000:3000 -w /app perl-rt carton exec /app/foo.pl daemon -l http://0.0.0.0:3000

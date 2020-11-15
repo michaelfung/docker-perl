@@ -1,0 +1,1 @@
+docker build --target rt -t perl-rt .
