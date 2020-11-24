@@ -11,12 +11,13 @@ ENV PERLBREW_ROOT /opt/perlbrew
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 RUN apt-get update \
-    && apt-get -y install git curl build-essential \
+    && apt-get install -y git curl build-essential ca-certificates locales \
+    && apt-get install -y less procps lsof \
     && apt-get install -y libev4 libev-dev libffi6 libffi-dev \
     && apt-get install -y libzmq5 libzmq3-dev \
     && apt-get install -y openssl libssl1.1 libssl-dev libnss3 libnss3-dev \
     && apt-get install -y zlib1g zlib1g-dev \
-    && apt-get -y install perlbrew \
+    && apt-get install -y perlbrew \
     && \curl -L https://install.perlbrew.pl | bash \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
