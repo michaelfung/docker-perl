@@ -33,17 +33,49 @@ RUN source /opt/perlbrew/etc/bashrc \
     && cpanm Carton \
     && rm -rf ~/.cpanm
 
-ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-5.28.3/bin:/usr/sbin:/usr/bin:/sbin:/bin
-CMD ["/bin/bash"]
+ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-${PERLVER}/bin:$PATH
 
 
-##### devel #####
-FROM base AS devel
+##### libraries #####
+FROM base AS libraries
 
 # add additional required library and packages here:
 #RUN apt-get update \
 #    && apt-get -y install some-library some-package \
 #    && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
+
+# add additional Perl modules for runtime here:
+# RUN source /opt/perlbrew/etc/bashrc \
+#     && perlbrew use ${PERLVER} \
+#     && cpanm Some::Modules \
+#     && rm -rf ~/.cpanm
+
+##### devel #####
+FROM libraries AS devel
+
+# add additional required library and packages here:
+
+## add locales and setup 
+RUN apt-get update \
+    && apt-get -y install locales \    
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen    
+
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
+
+# add additional Perl modules for DEVELOPMENT ONLY here:
+RUN source /opt/perlbrew/etc/bashrc \
+    && perlbrew use ${PERLVER} \
+    && cpanm Perl::Critic Perl::Tidy \
+    && rm -rf ~/.cpanm
+
+COPY entrypoint-devel.sh /
+
+ENTRYPOINT ["/entrypoint-devel.sh"]
+CMD ["/bin/bash"]
 
 
 ##### runtime #####
@@ -67,10 +99,10 @@ RUN apt-get update \
     && apt-get install -y zlib1g \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
-COPY --from=devel /opt/perlbrew/ /opt/perlbrew/
+COPY --from=libraries /opt/perlbrew/ /opt/perlbrew/
 
 COPY entrypoint.sh /
 
-ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-5.28.3/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-${PERLVER}/bin:$PATH
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash"]
