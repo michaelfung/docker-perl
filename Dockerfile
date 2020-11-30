@@ -11,7 +11,7 @@ ENV PERLBREW_ROOT /opt/perlbrew
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 RUN apt-get update \
-    && apt-get install -y git curl build-essential ca-certificates locales \
+    && apt-get install -y git curl build-essential ca-certificates \
     && apt-get install -y less procps lsof \
     && apt-get install -y libev4 libev-dev libffi6 libffi-dev \
     && apt-get install -y libzmq5 libzmq3-dev \
@@ -55,22 +55,22 @@ FROM libraries AS devel
 
 # add additional required library and packages here:
 
-## add locales and setup 
+## add locales and setup
 RUN apt-get update \
-    && apt-get -y install locales \    
+    && apt-get -y install locales \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
-    && locale-gen    
+    && locale-gen
 
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 # add additional Perl modules for DEVELOPMENT ONLY here:
-RUN source /opt/perlbrew/etc/bashrc \
-    && perlbrew use ${PERLVER} \
-    && cpanm Perl::Critic Perl::Tidy \
-    && rm -rf ~/.cpanm
+# RUN source /opt/perlbrew/etc/bashrc \
+#     && perlbrew use ${PERLVER} \
+#     && cpanm Some::Module \
+#     && rm -rf ~/.cpanm
 
 COPY entrypoint-devel.sh /
 
