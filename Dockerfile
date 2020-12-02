@@ -81,6 +81,8 @@ CMD ["/bin/bash"]
 ##### runtime #####
 FROM debian:buster AS rt
 
+ARG PERLVER="5.28.3"
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
 SHELL ["/bin/bash", "-c"]
