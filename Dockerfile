@@ -57,7 +57,7 @@ FROM libraries AS devel
 
 ## add locales and setup
 RUN apt-get update \
-    && apt-get -y install locales \
+    && apt-get -y install locales exuberant-ctags \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
     && locale-gen
