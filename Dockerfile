@@ -1,7 +1,7 @@
 ##### base #####
 FROM debian:buster AS base
 
-ARG PERLVER="5.28.3"
+ARG PERLVER="5.32.1"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
@@ -81,7 +81,7 @@ CMD ["/bin/bash"]
 ##### runtime #####
 FROM debian:buster AS rt
 
-ARG PERLVER="5.28.3"
+ARG PERLVER="5.32.1"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
