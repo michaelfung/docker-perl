@@ -22,7 +22,8 @@ RUN apt-get update \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
 RUN source /opt/perlbrew/etc/bashrc \
-    && (perlbrew install -j2 --64int perl-${PERLVER} \
+    && CORES=$(grep 'cpu cores' /proc/cpuinfo | uniq | cut -d ':'  -f 2 | xargs) \
+    && (perlbrew install -j${CORES} --64int perl-${PERLVER} \
     || (cat /opt/perlbrew/build.perl-${PERLVER}.log; exit 1;)) \
     && rm -rf /opt/perlbrew/build/* \
     && rm -rf /opt/perlbrew/dists/*
@@ -77,7 +78,6 @@ COPY entrypoint-devel.sh /
 ENTRYPOINT ["/entrypoint-devel.sh"]
 CMD ["/bin/bash"]
 
-
 ##### runtime #####
 FROM debian:buster AS rt
 
@@ -105,6 +105,12 @@ COPY --from=libraries /opt/perlbrew/ /opt/perlbrew/
 
 COPY entrypoint.sh /
 
+RUN mkdir -p /app-data && \
+    chown -R nobody /app-data
+USER nobody
+
 ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-${PERLVER}/bin:$PATH
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["/bin/bash", "--rcfile /etc/skel.bashrc"]
+
+VOLUME [ "/app-data" ]
