@@ -41,9 +41,9 @@ ENV PATH=/opt/perlbrew/bin:/opt/perlbrew/perls/perl-${PERLVER}/bin:$PATH
 FROM base AS libraries
 
 # add additional required library and packages here:
-#RUN apt-get update \
-#    && apt-get -y install some-library some-package \
-#    && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
+RUN apt-get update \
+    && apt-get -y install libyaml-dev libsqlite3-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
 # add additional Perl modules for runtime here:
 # RUN source /opt/perlbrew/etc/bashrc \
@@ -54,7 +54,7 @@ FROM base AS libraries
 ##### devel #####
 FROM libraries AS devel
 
-# add additional required library and packages here:
+# add additional required library and packages for developement only #
 
 ## add locales and setup
 RUN apt-get update \
