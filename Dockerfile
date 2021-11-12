@@ -42,7 +42,9 @@ FROM base AS libraries
 
 # add additional required library and packages here:
 RUN apt-get update \
-    && apt-get -y install libyaml-dev libsqlite3-dev \
+    && apt-get -y install libsqlite3-0 libsqlite3-dev \
+    && apt-get -y install libyaml-0-2 libyaml-dev \
+    && apt-get -y install libuv1 libuv1-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
 # add additional Perl modules for runtime here:
@@ -91,7 +93,7 @@ ENV PERLBREW_ROOT /opt/perlbrew
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 #
-# install required binary libs
+# install required binary libs, MUST include libs from the **libraries** image
 #
 RUN apt-get update \
     && apt-get install -y curl ca-certificates less procps lsof \
@@ -99,6 +101,7 @@ RUN apt-get update \
     && apt-get install -y libzmq5 libzmq3-dev \
     && apt-get install -y openssl libssl1.1 libnss3 \
     && apt-get install -y zlib1g \
+    && apt-get -y install libsqlite3-0 libyaml-0-2 libuv1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
 COPY --from=libraries /opt/perlbrew/ /opt/perlbrew/
