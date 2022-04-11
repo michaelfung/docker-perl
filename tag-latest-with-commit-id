@@ -1,0 +1,5 @@
+COMMIT_ID=$(git log -1 --pretty=format:"%h")
+
+docker image tag perl-devel:latest perl-devel:${COMMIT_ID}
+
+docker image tag perl-rt:latest perl-rt:${COMMIT_ID}
