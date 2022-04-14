@@ -1,5 +1,5 @@
 ##### base #####
-FROM debian:buster AS base
+FROM debian:bullseye AS base
 
 ARG PERLVER="5.32.1"
 
@@ -13,7 +13,7 @@ COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 RUN apt-get update \
     && apt-get install -y git curl build-essential ca-certificates \
     && apt-get install -y less procps lsof \
-    && apt-get install -y libev4 libev-dev libffi6 libffi-dev \
+    && apt-get install -y libev4 libev-dev libffi7 libffi-dev \
     && apt-get install -y libzmq5 libzmq3-dev \
     && apt-get install -y openssl libssl1.1 libssl-dev libnss3 libnss3-dev \
     && apt-get install -y zlib1g zlib1g-dev \
@@ -81,7 +81,7 @@ ENTRYPOINT ["/entrypoint-devel.sh"]
 CMD ["/bin/bash"]
 
 ##### runtime #####
-FROM debian:buster AS rt
+FROM debian:bullseye AS rt
 
 ARG PERLVER="5.32.1"
 
@@ -97,7 +97,7 @@ COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 #
 RUN apt-get update \
     && apt-get install -y curl ca-certificates less procps lsof \
-    && apt-get install -y libev4 libffi6 \
+    && apt-get install -y libev4 libffi7 \
     && apt-get install -y libzmq5 libzmq3-dev \
     && apt-get install -y openssl libssl1.1 libnss3 \
     && apt-get install -y zlib1g \
