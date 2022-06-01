@@ -7,7 +7,7 @@ COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 RUN apt-get update \
     && apt-get install -y git curl build-essential ca-certificates \
     && apt-get install -y less procps lsof \
-    && apt-get install -y libev4 libev-dev libffi6 libffi-dev \
+    && apt-get install -y libev4 libev-dev libffi7 libffi-dev \
     && apt-get install -y libzmq5 libzmq3-dev \
     && apt-get install -y openssl libssl1.1 libssl-dev libnss3 libnss3-dev \
     && apt-get install -y zlib1g zlib1g-dev \
