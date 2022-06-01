@@ -1,0 +1,1 @@
+docker build --target devel -f Dockerfile.vscode -t perl-devel-vsc:5.32.1 .
