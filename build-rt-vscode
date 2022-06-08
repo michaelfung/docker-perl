@@ -1,0 +1,1 @@
+docker build --target rt -f Dockerfile.vscode -t perl-rt-vsc:5.32.1 .
