@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
 
@@ -22,7 +22,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
     - name: Image tag for rt
       id: meta-rt
       uses: docker/metadata-action@v4
@@ -33,8 +33,8 @@ jobs:
           type=raw,value=latest
           type=raw,value=5.32.1
           type=sha
-          
-    - name: Image tag for rt
+
+    - name: Image tag for devel
       id: meta-devel
       uses: docker/metadata-action@v4
       with:
@@ -43,7 +43,7 @@ jobs:
         tags: |
           type=raw,value=latest
           type=raw,value=5.32.1
-          type=sha          
+          type=sha
 
     - name: Build and push 'runtime'
       uses: docker/build-push-action@v3
@@ -52,10 +52,10 @@ jobs:
         platforms: |
           linux/amd64
           linux/arm/v7
-        target: rt        
+        target: rt
         push: true
         tags: ${{ steps.meta-rt.outputs.tags }}
-    
+
     - name: Build and push 'devel'
       uses: docker/build-push-action@v3
       with:
@@ -63,6 +63,6 @@ jobs:
         platforms: |
           linux/amd64
           linux/arm/v7
-        target: devel        
+        target: devel
         push: true
-        tags: ${{ steps.meta-devel.outputs.tags }}        
+        tags: ${{ steps.meta-devel.outputs.tags }}
