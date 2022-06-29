@@ -23,8 +23,19 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-    - name: Generate image tag
-      id: meta
+    - name: Image tag for rt
+      id: meta-rt
+      uses: docker/metadata-action@v4
+      with:
+        images: |
+          michaelfung/perl-rt
+        tags: |
+          type=raw,value=latest
+          type=raw,value=5.32.1
+          type=sha
+          
+    - name: Image tag for rt
+      id: meta-devel
       uses: docker/metadata-action@v4
       with:
         images: |
@@ -32,7 +43,7 @@ jobs:
         tags: |
           type=raw,value=latest
           type=raw,value=5.32.1
-          type=sha
+          type=sha          
 
     - name: Build and push 'runtime'
       uses: docker/build-push-action@v3
@@ -43,4 +54,15 @@ jobs:
           linux/arm/v7
         target: rt        
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: ${{ steps.meta-rt.outputs.tags }}
+    
+    - name: Build and push 'devel'
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        platforms: |
+          linux/amd64
+          linux/arm/v7
+        target: devel        
+        push: true
+        tags: ${{ steps.meta-devel.outputs.tags }}        
