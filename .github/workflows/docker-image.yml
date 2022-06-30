@@ -23,6 +23,13 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Image tag for rt
       id: meta-rt
       uses: docker/metadata-action@v4
@@ -54,7 +61,9 @@ jobs:
           linux/arm/v7
         target: rt
         push: true
-        tags: ${{ steps.meta-rt.outputs.tags }}
+        tags: |
+          ${{ steps.meta-rt.outputs.tags }}
+          ghcr.io/${{ steps.meta-rt.outputs.tags }}
 
     - name: Build and push 'devel'
       uses: docker/build-push-action@v3
@@ -65,4 +74,6 @@ jobs:
           linux/arm/v7
         target: devel
         push: true
-        tags: ${{ steps.meta-devel.outputs.tags }}
+        tags: |
+          ${{ steps.meta-devel.outputs.tags }}
+          ghcr.io/${{ steps.meta-devel.outputs.tags }}
