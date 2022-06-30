@@ -64,3 +64,5 @@ RUN apt-get update \
     && apt-get install -y zlib1g \
     && apt-get -y install libsqlite3-0 libyaml-0-2 libuv1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
+
+CMD ["/bin/bash"]
