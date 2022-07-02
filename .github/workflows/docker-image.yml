@@ -36,6 +36,7 @@ jobs:
       with:
         images: |
           michaelfung/perl-rt
+          ghcr.io/michaelfung/perl-rt
         tags: |
           type=raw,value=latest
           type=raw,value=5.32.1
@@ -47,6 +48,7 @@ jobs:
       with:
         images: |
           michaelfung/perl-devel
+          ghcr.io/michaelfung/perl-devel
         tags: |
           type=raw,value=latest
           type=raw,value=5.32.1
@@ -63,7 +65,6 @@ jobs:
         push: true
         tags: |
           ${{ steps.meta-rt.outputs.tags }}
-          ghcr.io/${{ steps.meta-rt.outputs.tags }}
 
     - name: Build and push 'devel'
       uses: docker/build-push-action@v3
@@ -76,4 +77,3 @@ jobs:
         push: true
         tags: |
           ${{ steps.meta-devel.outputs.tags }}
-          ghcr.io/${{ steps.meta-devel.outputs.tags }}
