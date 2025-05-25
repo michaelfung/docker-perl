@@ -1,23 +1,23 @@
 ##### devel base #####
-FROM perl:5.32.1-slim-bullseye AS devel-base
+FROM perl:5.36.3-slim-bookworm AS devel-base
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 RUN apt-get update \
     && apt-get install -y git curl build-essential ca-certificates \
     && apt-get install -y less procps lsof \
-    && apt-get install -y libev4 libev-dev libffi7 libffi-dev \
+    && apt-get install -y libev4 libev-dev libffi8 libffi-dev \
     && apt-get install -y libzmq5 libzmq3-dev \
-    && apt-get install -y openssl libssl1.1 libssl-dev libnss3 libnss3-dev \
+    && apt-get install -y openssl libssl3 libssl-dev libnss3 libnss3-dev \
     && apt-get install -y zlib1g zlib1g-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space
 
 ##### libraries #####
 FROM devel-base AS libraries
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add additional required library and packages here:
 RUN apt-get update \
@@ -30,7 +30,7 @@ RUN apt-get update \
 # add additional required library and packages for developement only #
 FROM libraries AS devel
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 ## add locales and setup
 RUN apt-get update \
@@ -41,16 +41,14 @@ RUN apt-get update \
 
 RUN cpanm Carton
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
 CMD ["/bin/bash"]
 
 ##### runtime base #####
-FROM perl:5.32.1-slim-bullseye AS rt
+FROM perl:5.36.3-slim-bookworm AS rt
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 #
@@ -58,9 +56,9 @@ COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 #
 RUN apt-get update \
     && apt-get install -y curl ca-certificates less procps lsof \
-    && apt-get install -y libev4 libffi7 \
+    && apt-get install -y libev4 libffi8 \
     && apt-get install -y libzmq5 libzmq3-dev \
-    && apt-get install -y openssl libssl1.1 libnss3 \
+    && apt-get install -y openssl libssl3 libnss3  \
     && apt-get install -y zlib1g \
     && apt-get -y install libsqlite3-0 libyaml-0-2 libuv1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*  # cleanup to save space

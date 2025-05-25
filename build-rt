@@ -1,1 +1,1 @@
-docker build --target rt -f Dockerfile -t perl-rt:5.32.1 .
+docker build --target rt -f Dockerfile -t perl-rt:5.36.3 .
