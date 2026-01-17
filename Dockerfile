@@ -39,7 +39,7 @@ RUN apt-get update \
     && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
     && locale-gen
 
-RUN cpanm Carton
+RUN cpanm Carton Carmel
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
