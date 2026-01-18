@@ -1,5 +1,5 @@
 ##### devel base #####
-FROM perl:5.36.3-slim-bookworm AS devel-base
+FROM perl:5.38.5-slim-bookworm AS devel-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -46,7 +46,7 @@ ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 CMD ["/bin/bash"]
 
 ##### runtime base #####
-FROM perl:5.36.3-slim-bookworm AS rt
+FROM perl:5.38.5-slim-bookworm AS rt
 
 ENV DEBIAN_FRONTEND=noninteractive
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
