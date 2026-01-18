@@ -18,3 +18,19 @@ Build runtime image for production:
 
 Look at the **app** folder.
 
+## Build for other architecture locally
+
+### Requirement
+
+Prepare a multi-arch builder (e.g. crossbuilder):
+
+    docker run --privileged --rm tonistiigi/binfmt --install all
+    docker buildx create --name crossbuilder --use
+    docker buildx inspect  crossbuilder --bootstrap
+
+### Build for arm64
+
+    docker buildx build --target devel --platform linux/arm64 -t michaelfung/perl-devel:5.36.3 . --push
+
+    docker buildx build --target devel --platform linux/arm64 -t michaelfung/perl-rt:5.36.3 . --push
+
